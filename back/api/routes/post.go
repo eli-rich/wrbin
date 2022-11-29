@@ -38,6 +38,6 @@ func CreatPost(c *gin.Context) {
 
 	db.Post.Create(&body)
 	c.JSON(200, gin.H{
-		"message": "Post created.",
+		"message": body.Slug,
 	})
 }

@@ -1,4 +1,5 @@
 import { Icon } from '@iconify-icon/solid';
+import { A } from '@solidjs/router';
 import { createSignal, Match, Show, Switch } from 'solid-js';
 import Modal from './Modal';
 export default function NavBar() {
@@ -16,7 +17,9 @@ export default function NavBar() {
     <>
       <div class='navbar bg-base-300'>
         <div class='flex-1'>
-          <a class='btn btn-ghost normal-case text-xl'>wrBIN</a>
+          <A href='/' class='btn btn-ghost normal-case text-xl'>
+            wrBIN
+          </A>
         </div>
         <div class='flex-none'>
           <Switch>
