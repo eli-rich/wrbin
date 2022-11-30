@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/eli-rich/gobin/api/auth"
+	"github.com/eli-rich/wrbin/api/auth"
 	"github.com/gin-gonic/gin"
 )
 

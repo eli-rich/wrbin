@@ -3,9 +3,9 @@ package routes
 import (
 	"errors"
 
-	"github.com/eli-rich/gobin/api/db"
-	"github.com/eli-rich/gobin/api/models"
-	"github.com/eli-rich/gobin/api/util"
+	"github.com/eli-rich/wrbin/api/db"
+	"github.com/eli-rich/wrbin/api/models"
+	"github.com/eli-rich/wrbin/api/util"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )

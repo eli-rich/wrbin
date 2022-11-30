@@ -1,4 +1,4 @@
-module github.com/eli-rich/gobin
+module github.com/eli-rich/wrbin
 
 go 1.19
 

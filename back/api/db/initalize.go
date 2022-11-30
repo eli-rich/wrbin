@@ -3,7 +3,7 @@ package db
 import (
 	"log"
 
-	"github.com/eli-rich/gobin/api/models"
+	"github.com/eli-rich/wrbin/api/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )

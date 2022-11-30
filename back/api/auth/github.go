@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/eli-rich/gobin/api/db"
-	"github.com/eli-rich/gobin/api/util"
+	"github.com/eli-rich/wrbin/api/db"
+	"github.com/eli-rich/wrbin/api/util"
 	"github.com/gin-gonic/gin"
 	"github.com/monaco-io/request"
 )

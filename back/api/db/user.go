@@ -3,7 +3,7 @@ package db
 import (
 	"errors"
 
-	"github.com/eli-rich/gobin/api/models"
+	"github.com/eli-rich/wrbin/api/models"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
