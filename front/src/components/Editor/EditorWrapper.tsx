@@ -10,7 +10,7 @@ export default function EditorWrapper() {
   let editorParent!: HTMLDivElement;
   let editor: EditorView;
 
-  const [showLink, setShowLink] = createSignal<boolean>(true);
+  const [showLink, setShowLink] = createSignal<boolean>(false);
   const [link, setLink] = createSignal<string>('');
 
   const handleUpload = async () => {

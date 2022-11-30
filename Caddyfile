@@ -1,0 +1,7 @@
+emdn.me {
+	reverse_proxy localhost:3000
+}
+
+www.emdn.me {
+	reverse_proxy localhost:3000
+}
