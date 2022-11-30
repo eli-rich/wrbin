@@ -13,7 +13,7 @@ import (
 func GetPost(c *gin.Context) {
 	var post models.Post
 	slug := c.Query("slug")
-	result := db.Post.First(&post, "slug = ?", slug)
+	result := db.Data.First(&post, "slug = ?", slug)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		c.JSON(404, gin.H{"error": "Post not found"})
 		return
@@ -36,7 +36,7 @@ func CreatPost(c *gin.Context) {
 		body.Slug = util.GenerateSlug()
 	}
 
-	db.Post.Create(&body)
+	db.Data.Create(&body)
 	c.JSON(200, gin.H{
 		"message": body.Slug,
 	})

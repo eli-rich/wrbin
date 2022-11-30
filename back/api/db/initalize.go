@@ -8,13 +8,13 @@ import (
 	"gorm.io/gorm"
 )
 
-var Post *gorm.DB
+var Data *gorm.DB
 
 func Initalize() {
 	var err error
-	Post, err = gorm.Open(sqlite.Open("test.sqlite"), &gorm.Config{})
+	Data, err = gorm.Open(sqlite.Open("test.sqlite"), &gorm.Config{})
 	if err != nil {
 		log.Fatalln(err)
 	}
-	Post.AutoMigrate(&models.Post{})
+	Data.AutoMigrate(&models.Post{})
 }

@@ -9,6 +9,6 @@ import (
 
 func CheckExists(slug string) bool {
 	var Exists models.Post
-	result := Post.First(&Exists, "slug = ?", slug)
+	result := Data.First(&Exists, "slug = ?", slug)
 	return !errors.Is(result.Error, gorm.ErrRecordNotFound)
 }
