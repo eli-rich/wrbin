@@ -4,9 +4,9 @@ import "math/rand"
 
 const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-func GenerateSlug() string {
+func GenerateSlug(length int) string {
 	var slug string
-	for i := 0; i < 6; i++ {
+	for i := 0; i < length; i++ {
 		slug += string(letters[rand.Intn(len(letters))])
 	}
 	return slug

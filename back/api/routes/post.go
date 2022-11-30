@@ -31,9 +31,9 @@ func CreatPost(c *gin.Context) {
 		})
 		return
 	}
-	body.Slug = util.GenerateSlug()
+	body.Slug = util.GenerateSlug(6)
 	for db.CheckPostExists(body.Slug) {
-		body.Slug = util.GenerateSlug()
+		body.Slug = util.GenerateSlug(6)
 	}
 
 	db.Data.Create(&body)

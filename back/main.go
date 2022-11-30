@@ -19,6 +19,7 @@ func main() {
 	}
 	db.Initalize()
 	gin.SetMode(gin.ReleaseMode)
+
 	r := gin.Default()
 	r.Use(gzip.DefaultHandler().Gin)
 	auth.InitSessionMiddleware(r)

@@ -6,7 +6,10 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
+
+var env = godotenv.Load()
 
 var secret = []byte(os.Getenv("SESH_SECRET"))
 var Store = cookie.NewStore(secret)

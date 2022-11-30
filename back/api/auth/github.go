@@ -1,57 +1,73 @@
 package auth
 
 import (
-	"fmt"
 	"log"
 	"os"
+	"time"
 
+	"github.com/eli-rich/gobin/api/db"
+	"github.com/eli-rich/gobin/api/util"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/monaco-io/request"
 )
+
+var activeStates = make(map[string]chan bool)
 
 var githubClientID string = os.Getenv("GITHUB_CLIENT")
 var githubSecret string = os.Getenv("GITHUB_SECRET")
 var githubRedirect string = os.Getenv("GITHUB_REDIRECT")
-var finalCallback string = os.Getenv("FINAL_CALLBACK")
+var rootURL string = os.Getenv("FINAL_CALLBACK")
 
 func InitalizeGithub(c *gin.Context) {
-	access := c.Param("access_token")
-	if access != "" {
-		c.Redirect(302, finalCallback)
-		return
-	}
-	state := uuid.NewString()
-	// db.Data.Create(&models.User{UUID: state})
+	state := util.GenerateSlug(20)
+	activeStates[state] = make(chan bool)
+	go RemoveState(state)
 	c.Redirect(302, "https://github.com/login/oauth/authorize?client_id="+githubClientID+"&redirect_uri="+githubRedirect+"&state="+state)
-	fmt.Println("MADE IT HERE")
-	fmt.Println(finalCallback)
 }
 
-func GithubCallback(c *gin.Context) {
-	code := c.Query("code")
+func AuthorizeGithub(c *gin.Context) {
 	state := c.Query("state")
-	// user := db.GetUserByUUID(state)
-	// if user.UUID == "" {
-	// 	c.Redirect(302, "/")
-	// 	return
-	// }
+	thread, ok := activeStates[state]
+	// state doesn't exist in map, or is expired.
+	// something fishy is going on.
+	if !ok {
+		c.Redirect(302, rootURL)
+	}
+	thread <- true
+
+	code := c.Query("code")
+	token := RequestGithubToken(code)
+	c.Redirect(302, rootURL)
+	db.CreateUserFromGithubToken(token)
+}
+
+func RequestGithubToken(code string) string {
 	var result interface{}
+
 	client := request.Client{
 		URL:    "https://github.com/login/oauth/access_token",
 		Method: "POST",
+		Query: map[string]string{
+			"client_id":     githubClientID,
+			"client_secret": githubSecret,
+			"code":          code,
+		},
 		Header: map[string]string{"Accept": "application/json"},
-		Query:  map[string]string{"client_id": githubClientID, "client_secret": githubSecret, "code": code, "state": state},
 	}
-	fmt.Println("MADE IT TO FIRST CB")
-
 	resp := client.Send().Scan(&result)
 	if !resp.OK() {
 		log.Println(resp.Error())
-		c.JSON(500, gin.H{"error": "Failed to get access token from github."})
-		return
+		return "error"
 	}
-	fmt.Println("BEFORE RESULT")
+	return result.(map[string]interface{})["access_token"].(string)
+}
 
-	fmt.Println(result)
+func RemoveState(state string) {
+	thread := activeStates[state]
+	select {
+	case <-thread:
+		delete(activeStates, state)
+	case <-time.After(2 * time.Minute):
+		delete(activeStates, state)
+	}
 }
