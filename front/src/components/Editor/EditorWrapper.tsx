@@ -33,7 +33,7 @@ export default function EditorWrapper() {
 
   return (
     <>
-      <div ref={editorParent} class='bg-[#282828] min-h-[66vh] h-fit mx-auto w-[80%]'></div>
+      <div ref={editorParent} class='bg-[#282828] min-h-[66vh] h-fit mx-auto w-[80%]' />
       <EditorOptions handleUpload={handleUpload} />
     </>
   );

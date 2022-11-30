@@ -29,7 +29,7 @@ export default function EditorViewer() {
 
   return (
     <>
-      <div ref={editorParent} class='bg-[#282828] h-[66vh] mx-auto w-[80%]'></div>
+      <div ref={editorParent} class='bg-[#282828] h-[66vh] mx-auto w-[80%]' />
     </>
   );
 }
