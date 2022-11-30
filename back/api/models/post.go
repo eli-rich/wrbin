@@ -4,6 +4,7 @@ import "gorm.io/gorm"
 
 type Post struct {
 	gorm.Model
-	Content string
-	Slug    string
+	Content  string
+	AuthorID string
+	Slug     string `gorm:"uniqueIndex"`
 }

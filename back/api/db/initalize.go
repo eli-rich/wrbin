@@ -17,4 +17,5 @@ func Initalize() {
 		log.Fatalln(err)
 	}
 	Data.AutoMigrate(&models.Post{})
+	Data.AutoMigrate(&models.User{})
 }
