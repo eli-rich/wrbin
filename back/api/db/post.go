@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func CheckExists(slug string) bool {
+func CheckPostExists(slug string) bool {
 	var Exists models.Post
 	result := Data.First(&Exists, "slug = ?", slug)
 	return !errors.Is(result.Error, gorm.ErrRecordNotFound)
