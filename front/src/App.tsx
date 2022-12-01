@@ -9,7 +9,7 @@ export default function App() {
     <>
       <Routes>
         <Route path='/' component={Home} />
-        <Route path='/:slug' component={View} data={ViewData} />
+        <Route path='/bin/:slug' component={View} data={ViewData} />
       </Routes>
     </>
   );

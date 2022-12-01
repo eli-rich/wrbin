@@ -7,7 +7,7 @@ import (
 
 func LoadRoutes(r *gin.Engine) {
 	InitializeCache()
-	r.GET("/:slug", func(c *gin.Context) {
+	r.GET("/bin/:slug", func(c *gin.Context) {
 		c.File("./front/dist/index.html")
 
 		slug := c.Param("slug")

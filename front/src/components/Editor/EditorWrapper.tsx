@@ -86,7 +86,7 @@ export default function EditorWrapper() {
       >
         <p class='text-xl'>
           View your file:{' '}
-          <A href={link()} class='text-accent underline decoration-secondary'>
+          <A href={`/bin/${link()}`} class='text-accent underline decoration-secondary'>
             here
           </A>
         </p>
