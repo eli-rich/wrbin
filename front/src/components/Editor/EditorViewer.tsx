@@ -1,19 +1,26 @@
 import { EditorView } from '@codemirror/view';
-import { useParams } from '@solidjs/router';
+import { useRouteData } from '@solidjs/router';
 import { gruvboxDark } from 'cm6-theme-gruvbox-dark';
 import { basicSetup } from 'codemirror';
-import { onMount } from 'solid-js';
+import { createEffect, onMount } from 'solid-js';
 
 export default function EditorViewer() {
   let editorParent!: HTMLDivElement;
   let editor: EditorView;
-
-  const params = useParams();
-
-  onMount(async () => {
-    const { slug } = params;
-    const response = await fetch(`/api/post?slug=${slug}`);
-    const { content } = await response.json();
+  const content: any = useRouteData();
+  createEffect(() => {
+    if (content() === undefined) return;
+    if (editor) {
+      editor.dispatch({
+        changes: {
+          from: 0,
+          to: editor.state.doc.length,
+          insert: content(),
+        },
+      });
+    }
+  });
+  onMount(() => {
     const theme = EditorView.baseTheme({
       '&': {
         width: '100%',
@@ -21,7 +28,7 @@ export default function EditorViewer() {
       },
     });
     editor = new EditorView({
-      doc: content,
+      doc: content(),
       parent: editorParent,
       extensions: [basicSetup, theme, gruvboxDark],
     });

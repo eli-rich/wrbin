@@ -11,4 +11,6 @@ func LoadRoutes(r *gin.Engine) {
 
 	r.GET("/auth/github", auth.InitalizeGithub)
 	r.GET("/auth/github/callback", auth.AuthorizeGithub)
+
+	r.GET("/api/me", Me)
 }

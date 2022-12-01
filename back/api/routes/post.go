@@ -1,24 +1,24 @@
 package routes
 
 import (
-	"errors"
+	"net/http"
 
 	"github.com/eli-rich/wrbin/api/db"
 	"github.com/eli-rich/wrbin/api/models"
 	"github.com/eli-rich/wrbin/api/util"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 func GetPost(c *gin.Context) {
-	var post models.Post
-	slug := c.Query("slug")
-	result := db.Data.First(&post, "slug = ?", slug)
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		c.JSON(404, gin.H{"error": "Post not found"})
+	post := db.GetPostBySlug(c.Query("slug"))
+	if post.Slug == "not found" {
+		c.JSON(http.StatusNotFound, gin.H{
+			"content": "Post not found",
+		})
 		return
 	}
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"content": post.Content,
 	})
 }
@@ -26,7 +26,7 @@ func GetPost(c *gin.Context) {
 func CreatPost(c *gin.Context) {
 	var body models.Post
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.JSON(400, gin.H{
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"error": "Invalid request body",
 		})
 		return
@@ -36,8 +36,16 @@ func CreatPost(c *gin.Context) {
 		body.Slug = util.GenerateSlug(6)
 	}
 
-	db.Data.Create(&body)
-	c.JSON(200, gin.H{
+	sesh := sessions.Default(c)
+	UUID := sesh.Get("user")
+	err := db.CreatePost(body.Content, UUID.(string), body.Slug)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Internal Server Error",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
 		"message": body.Slug,
 	})
 }

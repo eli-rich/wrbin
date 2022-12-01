@@ -1,13 +1,15 @@
 import { Route, Routes } from '@solidjs/router';
+import { lazy } from 'solid-js';
 import Home from './pages/Home';
-import View from './pages/View';
+const View = lazy(() => import('./pages/View'));
+import ViewData from './pages/View.data';
 
 export default function App() {
   return (
     <>
       <Routes>
         <Route path='/' component={Home} />
-        <Route path='/:slug' component={View} />
+        <Route path='/:slug' component={View} data={ViewData} />
       </Routes>
     </>
   );
