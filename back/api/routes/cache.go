@@ -16,12 +16,16 @@ func InitializeCache() {
 
 func LoadIntoCache(slug string) {
 	fmt.Println("Loaded into cache:", slug)
+	exists := POST_CACHE[slug]
+	if exists.Slug != "" {
+		return
+	}
 	POST_CACHE[slug] = db.GetPostBySlug(slug)
 	go RemoveFromCache(slug)
 }
 
 func RemoveFromCache(slug string) {
-	time.Sleep(10 * time.Second)
+	time.Sleep(60 * time.Second)
 	fmt.Println("Removing from cache:", slug)
 	delete(POST_CACHE, slug)
 }
