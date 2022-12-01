@@ -1,9 +1,13 @@
 emdn.me {
-	encode gzip
+	encode {
+		gzip 9
+	}
 	reverse_proxy localhost:3000
 }
 
 www.emdn.me {
-	encode gzip
+	encode {
+		gzip 9
+	}
 	reverse_proxy localhost:3000
 }
