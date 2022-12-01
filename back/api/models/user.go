@@ -10,10 +10,9 @@ const (
 
 type User struct {
 	gorm.Model
-	Username string
+	Email    string `gorm:"unique"`
 	Password string
-	Token    string `gorm:"unique"`
-	UUID     string `gorm:"unique"`
+	UUID     string `gorm:"uniqueIndex"`
 	Auth     string
 	Posts    []Post `gorm:"foreignKey:AuthorID"`
 }

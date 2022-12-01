@@ -23,7 +23,18 @@ func GetUserByUUID(uuid string) models.User {
 	return user
 }
 
-func CreateUserFromGithubToken(token string) {
-	unique := uuid.NewString()
-	Data.Create(&models.User{UUID: unique, Token: token, Auth: "github"})
+func CreateUser(email string, password string, auth string) models.User {
+	exists := models.User{}
+	result := Data.First(&exists, "email = ?", email)
+	if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return exists
+	}
+	user := models.User{
+		Email:    email,
+		Password: password,
+		UUID:     uuid.NewString(),
+		Auth:     auth,
+	}
+	Data.Create(&user)
+	return user
 }

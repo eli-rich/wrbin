@@ -7,6 +7,7 @@ import (
 
 	"github.com/eli-rich/wrbin/api/db"
 	"github.com/eli-rich/wrbin/api/util"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/monaco-io/request"
 )
@@ -19,7 +20,12 @@ var githubRedirect string = os.Getenv("GITHUB_REDIRECT")
 var rootURL string = os.Getenv("FINAL_CALLBACK")
 
 func InitalizeGithub(c *gin.Context) {
-	state := util.GenerateSlug(20)
+	var state string = util.GenerateSlug(30)
+	_, ok := activeStates[state]
+	for ok {
+		state = util.GenerateSlug(30)
+		_, ok = activeStates[state]
+	}
 	activeStates[state] = make(chan bool)
 	go RemoveState(state)
 	c.Redirect(302, "https://github.com/login/oauth/authorize?client_id="+githubClientID+"&redirect_uri="+githubRedirect+"&state="+state)
@@ -36,12 +42,41 @@ func AuthorizeGithub(c *gin.Context) {
 	thread <- true
 
 	code := c.Query("code")
-	token := RequestGithubToken(code)
+	token := requestGithubToken(code)
+	if token == "error" {
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+	}
+	email := getGithubUserEmail(token)
+	if email == "error" {
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+	}
+	sesh := sessions.Default(c)
+	user := db.CreateUser(email, "", "github")
+
+	sesh.Delete("user")
+	sesh.Set("user", user.UUID)
+	sesh.Save()
+	log.Println("User logged in: " + user.Email)
+
 	c.Redirect(302, rootURL)
-	db.CreateUserFromGithubToken(token)
+
 }
 
-func RequestGithubToken(code string) string {
+func getGithubUserEmail(token string) string {
+	var result interface{}
+	client := request.Client{
+		URL:    "https://api.github.com/user",
+		Method: "GET",
+		Header: map[string]string{"Authorization": "Bearer " + token},
+	}
+	resp := client.Send().Scan(&result)
+	if !resp.OK() {
+		log.Println(resp.Error())
+	}
+	return result.(map[string]interface{})["email"].(string)
+}
+
+func requestGithubToken(code string) string {
 	var result interface{}
 
 	client := request.Client{
@@ -71,3 +106,10 @@ func RemoveState(state string) {
 		delete(activeStates, state)
 	}
 }
+
+// type GithubUser struct {
+// 	Name string `json:"name"`
+
+// func GithubProfile(token string) {
+
+// }

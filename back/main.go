@@ -7,6 +7,7 @@ import (
 	"github.com/eli-rich/wrbin/api/auth"
 	"github.com/eli-rich/wrbin/api/db"
 	"github.com/eli-rich/wrbin/api/routes"
+	"github.com/eli-rich/wrbin/api/util"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/nanmu42/gzip"
@@ -18,6 +19,7 @@ func main() {
 		log.Fatalln(err)
 	}
 	db.Initalize()
+	util.SeedRandom()
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
