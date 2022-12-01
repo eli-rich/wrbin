@@ -6,6 +6,14 @@ import (
 )
 
 func LoadRoutes(r *gin.Engine) {
+	InitializeCache()
+	r.GET("/:slug", func(c *gin.Context) {
+		c.File("./front/dist/index.html")
+
+		slug := c.Param("slug")
+		LoadIntoCache(slug)
+	})
+
 	r.GET("/api/post", GetPost)
 	r.GET("/:slug/raw", GetRaw)
 	r.POST("/api/post", CreatePost)

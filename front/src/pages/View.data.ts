@@ -1,13 +1,19 @@
 import { RouteDataFuncArgs } from '@solidjs/router';
 import { createResource } from 'solid-js';
 
+interface PostInfo {
+  content: string;
+  title: string;
+  lang: string;
+}
+
 const fetchContent = async (slug: string) => {
   const res = await fetch(`/api/post?slug=${slug}`);
-  const { content } = await res.json();
-  return content as string;
+  const post = await res.json();
+  return post as PostInfo;
 };
 
 export default function ViewData({ params }: RouteDataFuncArgs) {
-  const [content] = createResource(params.slug, fetchContent);
-  return content;
+  const [post] = createResource(params.slug, fetchContent);
+  return post;
 }

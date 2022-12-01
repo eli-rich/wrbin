@@ -13,15 +13,19 @@ import (
 )
 
 func GetPost(c *gin.Context) {
-	post := db.GetPostBySlug(c.Query("slug"))
+	post := POST_CACHE[c.Query("slug")]
 	if post.Slug == "not found" {
 		c.JSON(http.StatusNotFound, gin.H{
 			"content": "ERROR: Post not found.",
+			"title":   "ERROR",
+			"lang":    "",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"content": post.Content,
+		"title":   post.Title,
+		"lang":    post.Lang,
 	})
 }
 
