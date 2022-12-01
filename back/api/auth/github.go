@@ -106,10 +106,3 @@ func RemoveState(state string) {
 		delete(activeStates, state)
 	}
 }
-
-// type GithubUser struct {
-// 	Name string `json:"name"`
-
-// func GithubProfile(token string) {
-
-// }
