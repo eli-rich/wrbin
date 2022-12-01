@@ -4,7 +4,7 @@ interface EditorOptionsProps {
 export default function EditorOptions(props: EditorOptionsProps) {
   return (
     <>
-      <div class='flex w-[80%] mx-auto mt-8 gap-4'>
+      <div class='flex gap-4'>
         <select class='select select-secondary w-[10rem]'>
           <option selected>Text</option>
           <option disabled>Java</option>

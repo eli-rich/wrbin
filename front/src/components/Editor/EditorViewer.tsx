@@ -1,3 +1,4 @@
+import { EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import { useRouteData } from '@solidjs/router';
 import { gruvboxDark } from 'cm6-theme-gruvbox-dark';
@@ -27,10 +28,12 @@ export default function EditorViewer() {
         margin: '2rem auto 0 auto',
       },
     });
+
+    // create a readonly editor
     editor = new EditorView({
       doc: content(),
       parent: editorParent,
-      extensions: [basicSetup, theme, gruvboxDark],
+      extensions: [basicSetup, theme, gruvboxDark, EditorState.readOnly.of(true)],
     });
   });
 

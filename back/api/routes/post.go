@@ -14,7 +14,7 @@ func GetPost(c *gin.Context) {
 	post := db.GetPostBySlug(c.Query("slug"))
 	if post.Slug == "not found" {
 		c.JSON(http.StatusNotFound, gin.H{
-			"content": "Post not found",
+			"content": "ERROR: Post not found.",
 		})
 		return
 	}
@@ -23,7 +23,16 @@ func GetPost(c *gin.Context) {
 	})
 }
 
-func CreatPost(c *gin.Context) {
+func GetRaw(c *gin.Context) {
+	post := db.GetPostBySlug(c.Param("slug"))
+	if post.Slug == "not found" {
+		c.String(http.StatusNotFound, "ERROR: Post not found.")
+		return
+	}
+	c.String(http.StatusOK, post.Content)
+}
+
+func CreatePost(c *gin.Context) {
 	var body models.Post
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{

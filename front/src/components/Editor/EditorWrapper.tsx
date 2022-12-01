@@ -12,14 +12,14 @@ export default function EditorWrapper() {
 
   const [showLink, setShowLink] = createSignal<boolean>(false);
   const [link, setLink] = createSignal<string>('');
-
+  let title!: HTMLInputElement;
   const handleUpload = async () => {
     const result = await fetch('/api/post', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ content: editor.state.doc.toJSON().join('\n') }),
+      body: JSON.stringify({ content: editor.state.doc.toJSON().join('\n'), title: title.value }),
     });
     const data = await result.json();
     setLink(`/${data.message}`);
@@ -42,7 +42,26 @@ export default function EditorWrapper() {
 
   return (
     <>
-      <div ref={editorParent} class='bg-[#282828] min-h-[66vh] h-fit mx-auto w-[80%]' />
+      <div class='flex mt-4 -mb-4 w-[80%] mx-auto justify-between'>
+        <div class='form-control'>
+          <label class='input-group'>
+            <span>Title</span>
+            <input
+              type='text'
+              placeholder='My Bin'
+              class='input input-bordered input-primary'
+              ref={title}
+            />
+          </label>
+        </div>
+        <EditorOptions handleUpload={handleUpload} />
+      </div>
+
+      <div
+        ref={editorParent}
+        class='bg-[#282828] min-h-[66vh] h-fit mx-auto w-[80%]'
+        onClick={() => editor.focus()}
+      />
       <Modal
         htmlName='link-modal'
         show={showLink}
@@ -57,7 +76,6 @@ export default function EditorWrapper() {
           </A>
         </p>
       </Modal>
-      <EditorOptions handleUpload={handleUpload} />
     </>
   );
 }

@@ -7,7 +7,8 @@ import (
 
 func LoadRoutes(r *gin.Engine) {
 	r.GET("/api/post", GetPost)
-	r.POST("/api/post", CreatPost)
+	r.GET("/:slug/raw", GetRaw)
+	r.POST("/api/post", CreatePost)
 
 	r.GET("/auth/github", auth.InitalizeGithub)
 	r.GET("/auth/github/callback", auth.AuthorizeGithub)
