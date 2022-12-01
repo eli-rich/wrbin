@@ -22,7 +22,6 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
-	// r.Use(gzip.DefaultHandler().Gin)
 	auth.InitSessionMiddleware(r)
 	routes.LoadRoutes(r)
 	r.NoRoute(gin.WrapH(http.FileServer(http.Dir("./front/dist"))))
