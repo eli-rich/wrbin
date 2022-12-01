@@ -12,16 +12,31 @@ export default function EditorWrapper() {
 
   const [showLink, setShowLink] = createSignal<boolean>(false);
   const [link, setLink] = createSignal<string>('');
+  const [showErrModal, setShowErrModal] = createSignal<boolean>(false);
+  const [err, setErr] = createSignal<string>('');
   let title!: HTMLInputElement;
   const handleUpload = async () => {
-    const result = await fetch('/api/post', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ content: editor.state.doc.toJSON().join('\n'), title: title.value }),
-    });
-    const data = await result.json();
+    let result: Response;
+    let data: any;
+    try {
+      result = await fetch('/api/post', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: editor.state.doc.toJSON().join('\n'), title: title.value }),
+      });
+      data = await result.json();
+    } catch (e: any) {
+      setShowErrModal(true);
+      setErr(e.message ?? 'Error.');
+      return console.error(e);
+    }
+    if (data.error) {
+      setShowErrModal(true);
+      setErr(data.error);
+      return console.error(data.error);
+    }
     setLink(`/${data.message}`);
     setShowLink(true);
   };
@@ -75,6 +90,15 @@ export default function EditorWrapper() {
             here
           </A>
         </p>
+      </Modal>
+      <Modal
+        htmlName='error-modal'
+        show={showErrModal}
+        showHandler={setShowErrModal}
+        title='Error!'
+        centered={false}
+      >
+        <p class='text-xl'>{err()}</p>
       </Modal>
     </>
   );
