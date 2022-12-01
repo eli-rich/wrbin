@@ -34,9 +34,9 @@ func InitalizeGithub(c *gin.Context) {
 func AuthorizeGithub(c *gin.Context) {
 	state := c.Query("state")
 	thread, ok := activeStates[state]
-	// state doesn't exist in map, or is expired.
-	// something fishy is going on.
 	if !ok {
+		// state doesn't exist in map, or is expired.
+		// something fishy is going on.
 		c.Redirect(302, rootURL)
 	}
 	thread <- true
