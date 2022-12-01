@@ -38,7 +38,21 @@ func CreatPost(c *gin.Context) {
 
 	sesh := sessions.Default(c)
 	UUID := sesh.Get("user")
-	err := db.CreatePost(body.Content, UUID.(string), body.Slug)
+	var err error
+	if UUID == nil {
+		err = db.CreatePost(body.Content, "", body.Slug)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Internal Server Error",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"message": body.Slug,
+		})
+		return
+	}
+	err = db.CreatePost(body.Content, "", body.Slug)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Internal Server Error",
