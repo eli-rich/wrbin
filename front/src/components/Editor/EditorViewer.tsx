@@ -55,7 +55,7 @@ export default function EditorViewer() {
         </div>
         <button
           class='btn btn-primary'
-          onClick={() => (window.location.href = window.location.href + '/raw')}
+          onClick={() => (window.location.href = window.location.href.replace('/bin', '/raw'))}
         >
           Raw
         </button>

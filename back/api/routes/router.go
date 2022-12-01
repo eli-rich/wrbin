@@ -15,7 +15,7 @@ func LoadRoutes(r *gin.Engine) {
 	})
 
 	r.GET("/api/post", GetPost)
-	r.GET("/:slug/raw", GetRaw)
+	r.GET("/raw/:slug", GetRaw)
 	r.POST("/api/post", CreatePost)
 
 	r.GET("/auth/github", auth.InitalizeGithub)

@@ -14,6 +14,9 @@ import (
 
 func GetPost(c *gin.Context) {
 	post := POST_CACHE[c.Query("slug")]
+	if post.Slug == "" {
+		post = db.GetPostBySlug(c.Query("slug"))
+	}
 	if post.Slug == "not found" {
 		c.JSON(http.StatusNotFound, gin.H{
 			"content": "ERROR: Post not found.",
@@ -53,6 +56,12 @@ func CreatePost(c *gin.Context) {
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"error": "Invalid request body",
+		})
+		return
+	}
+	if len(body.Content) > 1000000 {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"error": "Content too long",
 		})
 		return
 	}
