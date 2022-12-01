@@ -23,6 +23,15 @@ func GetUserByUUID(uuid string) models.User {
 	return user
 }
 
+func GetUserByEmail(email string) models.User {
+	user := models.User{}
+	result := Data.First(&user, "email = ?", email)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return models.User{}
+	}
+	return user
+}
+
 func CreateUser(email string, password string, auth string) models.User {
 	exists := models.User{}
 	result := Data.First(&exists, "email = ?", email)
