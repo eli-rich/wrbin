@@ -1,7 +1,9 @@
 package routes
 
 import (
+	"log"
 	"net/http"
+	"time"
 
 	"github.com/eli-rich/wrbin/api/db"
 	"github.com/eli-rich/wrbin/api/models"
@@ -32,7 +34,17 @@ func GetRaw(c *gin.Context) {
 	c.String(http.StatusOK, post.Content)
 }
 
+var limiter = make(map[string]bool)
+
 func CreatePost(c *gin.Context) {
+	_, ok := limiter[c.ClientIP()]
+	if ok {
+		log.Println("[WARN] Rate limit exceeded for", c.ClientIP())
+		c.JSON(http.StatusTooManyRequests, gin.H{
+			"error": "ERROR: Too many requests.",
+		})
+		return
+	}
 	var body models.Post
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
@@ -49,7 +61,9 @@ func CreatePost(c *gin.Context) {
 	UUID := sesh.Get("user")
 	var err error
 	if UUID == nil {
-		err = db.CreatePost(body.Content, "", body.Slug)
+		err = db.CreatePost(body.Content, "", body.Slug, body.Title)
+		limiter[c.ClientIP()] = true
+		go removeLimit(c.ClientIP())
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": "Internal Server Error",
@@ -61,7 +75,9 @@ func CreatePost(c *gin.Context) {
 		})
 		return
 	}
-	err = db.CreatePost(body.Content, "", body.Slug)
+	err = db.CreatePost(body.Content, "", body.Slug, body.Title)
+	limiter[c.ClientIP()] = true
+	go removeLimit(c.ClientIP())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Internal Server Error",
@@ -71,4 +87,9 @@ func CreatePost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": body.Slug,
 	})
+}
+
+func removeLimit(ip string) {
+	time.Sleep(10 * time.Second)
+	delete(limiter, ip)
 }
