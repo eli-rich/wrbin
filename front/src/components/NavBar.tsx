@@ -68,13 +68,15 @@ export default function NavBar() {
               showHandler={setShowLogout}
             >
               <div class='w-full flex justify-center'>
-                <button
-                  class='btn btn-ghost bg-black text-white mt-4 mx-auto'
-                  onClick={deauthorize}
-                >
-                  Sign out
-                  <Icon icon='mdi:logout' class='text-3xl ml-2' />
-                </button>
+                <div class='flex flex-col gap-2 mt-4'>
+                  <A class='btn btn-primary' href='/posts'>
+                    My Bins
+                  </A>
+                  <button class='btn btn-ghost bg-black text-white mx-auto' onClick={deauthorize}>
+                    Sign out
+                    <Icon icon='mdi:logout' class='text-3xl ml-2' />
+                  </button>
+                </div>
               </div>
             </Modal>
           </Show>

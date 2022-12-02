@@ -88,7 +88,7 @@ func CreatePost(c *gin.Context) {
 		})
 		return
 	}
-	err = db.CreatePost(body.Content, "", body.Slug, body.Title)
+	err = db.CreatePost(body.Content, UUID.(string), body.Slug, body.Title)
 	limiter[c.ClientIP()] = true
 	go removeLimit(c.ClientIP())
 	if err != nil {

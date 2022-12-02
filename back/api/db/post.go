@@ -30,3 +30,9 @@ func CreatePost(content string, AuthorID string, slug string, title string) erro
 	}
 	return nil
 }
+
+func GetCollectionByAuthor(authorID string) []models.Post {
+	var posts []models.Post
+	Data.Table("posts").Select("title", "slug", "lang", "author_id").Where("author_id = ?", authorID).Find(&posts)
+	return posts
+}

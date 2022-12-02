@@ -13,6 +13,8 @@ func LoadRoutes(r *gin.Engine) {
 		slug := c.Param("slug")
 		LoadIntoCache(slug)
 	})
+	r.GET("/posts", PostsRoute)
+	r.GET("/api/collect", CollectPosts)
 
 	r.GET("/api/post", GetPost)
 	r.GET("/raw/:slug", GetRaw)
