@@ -22,4 +22,5 @@ func LoadRoutes(r *gin.Engine) {
 	r.GET("/auth/github/callback", auth.AuthorizeGithub)
 
 	r.GET("/api/me", Me)
+	r.GET("/auth/out", auth.SignOut)
 }

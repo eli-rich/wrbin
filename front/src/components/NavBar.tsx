@@ -1,6 +1,7 @@
 import { Icon } from '@iconify-icon/solid';
-import { A } from '@solidjs/router';
-import { createSignal, Match, Show, Switch } from 'solid-js';
+import { A, useRouteData } from '@solidjs/router';
+import { createMemo, createSignal, Match, Show, Switch } from 'solid-js';
+import { authorize, deauthorize } from '../auth';
 import Modal from './Modal';
 export default function NavBar() {
   const [showLogin, setShowLogin] = createSignal<boolean>(false);
@@ -13,6 +14,12 @@ export default function NavBar() {
     e.preventDefault();
     setShowLogout(!showLogout());
   };
+  const id: any = useRouteData();
+  const isLoggedIn = createMemo<boolean>(() => {
+    if (id() === undefined) return false;
+    if (id().id === undefined) return false;
+    return id().id !== '';
+  });
   return (
     <>
       <div class='navbar bg-base-300'>
@@ -23,12 +30,12 @@ export default function NavBar() {
         </div>
         <div class='flex-none'>
           <Switch>
-            <Match when={true}>
+            <Match when={isLoggedIn()}>
               <button class='btn btn-square btn-ghost' onClick={toggleLogoutModal}>
                 <Icon icon='mdi:user-circle-outline' class='text-3xl' />
               </button>
             </Match>
-            <Match when={false}>
+            <Match when={!isLoggedIn()}>
               <button class='btn btn-square btn-ghost' onClick={toggleLoginModal}>
                 <Icon icon='ic:baseline-log-in' class='text-3xl' />
               </button>
@@ -44,7 +51,7 @@ export default function NavBar() {
               showHandler={setShowLogin}
             >
               <div class='w-full flex justify-center'>
-                <button class='btn btn-ghost bg-black text-white mt-4 mx-auto' onClick={() => {}}>
+                <button class='btn btn-ghost bg-black text-white mt-4 mx-auto' onClick={authorize}>
                   Sign in with Github
                   <Icon icon='mdi:github' class='text-3xl ml-2' />
                 </button>
@@ -61,7 +68,10 @@ export default function NavBar() {
               showHandler={setShowLogout}
             >
               <div class='w-full flex justify-center'>
-                <button class='btn btn-ghost bg-black text-white mt-4 mx-auto' onClick={() => {}}>
+                <button
+                  class='btn btn-ghost bg-black text-white mt-4 mx-auto'
+                  onClick={deauthorize}
+                >
                   Sign out
                   <Icon icon='mdi:logout' class='text-3xl ml-2' />
                 </button>

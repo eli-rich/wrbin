@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"net/http"
 	"os"
 
 	"github.com/gin-contrib/sessions"
@@ -14,4 +15,11 @@ var Store = cookie.NewStore(secret)
 
 func InitSessionMiddleware(r *gin.Engine) {
 	r.Use(sessions.Sessions("wrbin_sesh", Store))
+}
+
+func SignOut(c *gin.Context) {
+	sesh := sessions.Default(c)
+	sesh.Clear()
+	sesh.Save()
+	c.Redirect(http.StatusFound, "/")
 }

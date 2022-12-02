@@ -3,7 +3,7 @@ import { EditorView } from '@codemirror/view';
 import { useRouteData } from '@solidjs/router';
 import { gruvboxDark } from 'cm6-theme-gruvbox-dark';
 import { basicSetup } from 'codemirror';
-import { createEffect, createMemo, createSignal, onMount } from 'solid-js';
+import { createEffect, createMemo, onMount } from 'solid-js';
 
 export default function EditorViewer() {
   let editorParent!: HTMLDivElement;
