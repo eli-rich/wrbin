@@ -44,7 +44,11 @@ export default function EditorWrapper() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: editor.state.doc.toJSON().join('\n'), title: title.value }),
+        body: JSON.stringify({
+          content: editor.state.doc.toJSON().join('\n'),
+          title: title.value,
+          lang: lang(),
+        }),
       });
       data = await result.json();
     } catch (e: any) {

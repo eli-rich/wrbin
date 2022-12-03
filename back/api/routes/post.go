@@ -74,7 +74,7 @@ func CreatePost(c *gin.Context) {
 	UUID := sesh.Get("user")
 	var err error
 	if UUID == nil {
-		err = db.CreatePost(body.Content, "", body.Slug, body.Title)
+		err = db.CreatePost(body.Content, "", body.Slug, body.Title, body.Lang)
 		limiter[c.ClientIP()] = true
 		go removeLimit(c.ClientIP())
 		if err != nil {
@@ -88,7 +88,7 @@ func CreatePost(c *gin.Context) {
 		})
 		return
 	}
-	err = db.CreatePost(body.Content, UUID.(string), body.Slug, body.Title)
+	err = db.CreatePost(body.Content, UUID.(string), body.Slug, body.Title, body.Lang)
 	limiter[c.ClientIP()] = true
 	go removeLimit(c.ClientIP())
 	if err != nil {

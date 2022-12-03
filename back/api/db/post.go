@@ -22,8 +22,8 @@ func GetPostBySlug(slug string) models.Post {
 	return post
 }
 
-func CreatePost(content string, AuthorID string, slug string, title string) error {
-	post := models.Post{Content: content, AuthorID: AuthorID, Slug: slug, Title: title}
+func CreatePost(content string, AuthorID string, slug string, title string, lang string) error {
+	post := models.Post{Content: content, AuthorID: AuthorID, Slug: slug, Title: title, Lang: lang}
 	result := Data.Create(&post)
 	if result.Error != nil {
 		return result.Error
