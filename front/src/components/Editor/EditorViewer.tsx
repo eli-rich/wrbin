@@ -1,25 +1,23 @@
-import { cppLanguage } from '@codemirror/lang-cpp';
-import { cssLanguage } from '@codemirror/lang-css';
-import { htmlLanguage } from '@codemirror/lang-html';
-import { javaLanguage } from '@codemirror/lang-java';
-import {
-  javascriptLanguage,
-  jsxLanguage,
-  tsxLanguage,
-  typescriptLanguage,
-} from '@codemirror/lang-javascript';
-import { jsonLanguage } from '@codemirror/lang-json';
-import { markdownLanguage } from '@codemirror/lang-markdown';
-import { phpLanguage } from '@codemirror/lang-php';
-import { pythonLanguage } from '@codemirror/lang-python';
-import { rustLanguage } from '@codemirror/lang-rust';
+const { javascriptLanguage, typescriptLanguage, jsxLanguage, tsxLanguage } = await import(
+  '@codemirror/lang-javascript'
+);
+
+const { htmlLanguage } = await import('@codemirror/lang-html');
+const { cppLanguage } = await import('@codemirror/lang-cpp');
+const { cssLanguage } = await import('@codemirror/lang-css');
+const { rustLanguage } = await import('@codemirror/lang-rust');
+const { jsonLanguage } = await import('@codemirror/lang-json');
+const { markdownLanguage } = await import('@codemirror/lang-markdown');
+const { javaLanguage } = await import('@codemirror/lang-java');
+const { phpLanguage } = await import('@codemirror/lang-php');
+
+const { pythonLanguage } = await import('@codemirror/lang-python');
 import { LRLanguage } from '@codemirror/language';
-import { EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import { useRouteData } from '@solidjs/router';
 import { gruvboxDark } from 'cm6-theme-gruvbox-dark';
 import { basicSetup } from 'codemirror';
-import { createEffect, createMemo, onMount } from 'solid-js';
+import { createEffect, createMemo } from 'solid-js';
 
 export default function EditorViewer() {
   let editorParent!: HTMLDivElement;
