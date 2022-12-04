@@ -20,15 +20,20 @@ var githubRedirect string = os.Getenv("GITHUB_REDIRECT")
 var rootURL string = os.Getenv("FINAL_CALLBACK")
 
 func InitalizeGithub(c *gin.Context) {
-	var state string = util.GenerateSlug(30)
+	state := generateState()
+	activeStates[state] = make(chan bool)
+	go RemoveState(state)
+	c.Redirect(302, "https://github.com/login/oauth/authorize?client_id="+githubClientID+"&redirect_uri="+githubRedirect+"&state="+state)
+}
+
+func generateState() string {
+	state := util.GenerateSlug(30)
 	_, ok := activeStates[state]
 	for ok {
 		state = util.GenerateSlug(30)
 		_, ok = activeStates[state]
 	}
-	activeStates[state] = make(chan bool)
-	go RemoveState(state)
-	c.Redirect(302, "https://github.com/login/oauth/authorize?client_id="+githubClientID+"&redirect_uri="+githubRedirect+"&state="+state)
+	return state
 }
 
 func AuthorizeGithub(c *gin.Context) {
