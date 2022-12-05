@@ -64,7 +64,10 @@ export default function EditorViewer() {
           Raw
         </button>
       </div>
-      <div ref={editorParent} class='bg-[#282828] h-[66vh] mx-auto w-[80%]' />
+      <div
+        ref={editorParent}
+        class='bg-[#272935] min-h-[66vh] h-fit mx-auto w-[80%] drop-shadow-2xl'
+      />
     </>
   );
 }
