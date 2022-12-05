@@ -1,23 +1,9 @@
-const { javascriptLanguage, typescriptLanguage, jsxLanguage, tsxLanguage } = await import(
-  '@codemirror/lang-javascript'
-);
-
-const { htmlLanguage } = await import('@codemirror/lang-html');
-const { cppLanguage } = await import('@codemirror/lang-cpp');
-const { cssLanguage } = await import('@codemirror/lang-css');
-const { rustLanguage } = await import('@codemirror/lang-rust');
-const { jsonLanguage } = await import('@codemirror/lang-json');
-const { markdownLanguage } = await import('@codemirror/lang-markdown');
-const { javaLanguage } = await import('@codemirror/lang-java');
-const { phpLanguage } = await import('@codemirror/lang-php');
-
-const { pythonLanguage } = await import('@codemirror/lang-python');
-import { LRLanguage } from '@codemirror/language';
 import { EditorView } from '@codemirror/view';
 import { useRouteData } from '@solidjs/router';
 import { gruvboxDark } from 'cm6-theme-gruvbox-dark';
 import { basicSetup } from 'codemirror';
 import { createEffect, createMemo } from 'solid-js';
+import getLanguageFromOption from './language';
 
 export default function EditorViewer() {
   let editorParent!: HTMLDivElement;
@@ -30,7 +16,7 @@ export default function EditorViewer() {
       margin: '2rem auto 0 auto',
     },
   });
-  createEffect(() => {
+  createEffect(async () => {
     if (post() === undefined) return;
     if (!editor) {
       editor = new EditorView({
@@ -40,51 +26,7 @@ export default function EditorViewer() {
       });
     }
     const content = editor.state.doc.toJSON().join('\n');
-    let language: LRLanguage | undefined;
-    switch (post().lang) {
-      case 'Markdown':
-        language = markdownLanguage as LRLanguage;
-        break;
-      case 'JavaScript':
-        language = javascriptLanguage;
-        break;
-      case 'Python':
-        language = pythonLanguage;
-        break;
-      case 'TypeScript':
-        language = typescriptLanguage;
-        break;
-      case 'JSX':
-        language = jsxLanguage;
-        break;
-      case 'TSX':
-        language = tsxLanguage;
-        break;
-      case 'HTML':
-        language = htmlLanguage;
-        break;
-      case 'CSS':
-        language = cssLanguage;
-        break;
-      case 'JSON':
-        language = jsonLanguage;
-        break;
-      case 'C++':
-        language = cppLanguage;
-        break;
-      case 'Rust':
-        language = rustLanguage;
-        break;
-      case 'Java':
-        language = javaLanguage;
-        break;
-      case 'PHP':
-        language = phpLanguage;
-        break;
-      default:
-        language = undefined;
-        break;
-    }
+    const language = await getLanguageFromOption(post().lang);
     if (editor) editor.destroy();
     if (language === undefined) {
       editor = new EditorView({

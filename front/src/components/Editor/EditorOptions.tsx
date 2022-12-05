@@ -1,3 +1,5 @@
+import { onMount } from 'solid-js';
+
 interface EditorOptionsProps {
   handleUpload: () => Promise<void>;
   updateLang: (e: Event) => void;
@@ -8,19 +10,31 @@ export default function EditorOptions(props: EditorOptionsProps) {
       <div class='flex gap-4'>
         <select class='select select-secondary w-[10rem]' onInput={props.updateLang}>
           <option selected>Text</option>
-          <option>Markdown</option>
           <option>JavaScript</option>
+          <option>TypeScript</option>
+          <option>CoffeeScript</option>
+          <option>Python</option>
+          <option>Ruby</option>
           <option>HTML</option>
           <option>CSS</option>
-          <option>JSON</option>
-          <option>TypeScript</option>
+          <option>SASS</option>
           <option>JSX</option>
           <option>TSX</option>
-          <option>Python</option>
           <option>PHP</option>
-          <option>Java</option>
+          <option>C</option>
           <option>C++</option>
+          <option>Go</option>
           <option>Rust</option>
+          <option>C#</option>
+          <option>Java</option>
+          <option>Kotlin</option>
+          <option>Swift</option>
+          <option>Dart</option>
+          <option>Shell</option>
+          <option>Powershell</option>
+          <option>Markdown</option>
+          <option>JSON</option>
+          <option>Brainfuck</option>
         </select>
         <button class='btn btn-secondary btn-outline w-[10rem]' onClick={props.handleUpload}>
           Save

@@ -5,22 +5,8 @@ import { A } from '@solidjs/router';
 
 import { basicSetup } from 'codemirror';
 import { EditorView } from '@codemirror/view';
-import { gruvboxDark } from 'cm6-theme-gruvbox-dark';
-const { javascriptLanguage, typescriptLanguage, jsxLanguage, tsxLanguage } = await import(
-  '@codemirror/lang-javascript'
-);
-import { LRLanguage } from '@codemirror/language';
-
-const { htmlLanguage } = await import('@codemirror/lang-html');
-const { cppLanguage } = await import('@codemirror/lang-cpp');
-const { cssLanguage } = await import('@codemirror/lang-css');
-const { rustLanguage } = await import('@codemirror/lang-rust');
-const { jsonLanguage } = await import('@codemirror/lang-json');
-const { markdownLanguage } = await import('@codemirror/lang-markdown');
-const { javaLanguage } = await import('@codemirror/lang-java');
-const { phpLanguage } = await import('@codemirror/lang-php');
-
-const { pythonLanguage } = await import('@codemirror/lang-python');
+import { dracula } from 'thememirror';
+import getLanguageFromOption from './language';
 
 export default function EditorWrapper() {
   let editorParent!: HTMLDivElement;
@@ -31,7 +17,7 @@ export default function EditorWrapper() {
   const [showErrModal, setShowErrModal] = createSignal<boolean>(false);
   const [err, setErr] = createSignal<string>('');
 
-  const [lang, setLang] = createSignal<string>('');
+  const [lang, setLang] = createSignal<string>('Text');
 
   let title!: HTMLInputElement;
   const handleUpload = async () => {
@@ -79,68 +65,24 @@ export default function EditorWrapper() {
       editor = new EditorView({
         doc: '',
         parent: editorParent,
-        extensions: [basicSetup, theme, gruvboxDark],
+        extensions: [basicSetup, theme, dracula],
       });
     }
     const content = editor.state.doc.toJSON().join('\n');
-    let language: LRLanguage | undefined;
-    switch (lang()) {
-      case 'Markdown':
-        language = markdownLanguage as LRLanguage;
-        break;
-      case 'JavaScript':
-        language = javascriptLanguage;
-        break;
-      case 'Python':
-        language = pythonLanguage;
-        break;
-      case 'TypeScript':
-        language = typescriptLanguage;
-        break;
-      case 'JSX':
-        language = jsxLanguage;
-        break;
-      case 'TSX':
-        language = tsxLanguage;
-        break;
-      case 'HTML':
-        language = htmlLanguage;
-        break;
-      case 'CSS':
-        language = cssLanguage;
-        break;
-      case 'JSON':
-        language = jsonLanguage;
-        break;
-      case 'C++':
-        language = cppLanguage;
-        break;
-      case 'Rust':
-        language = rustLanguage;
-        break;
-      case 'Java':
-        language = javaLanguage;
-        break;
-      case 'PHP':
-        language = phpLanguage;
-        break;
-      default:
-        language = undefined;
-        break;
-    }
+    const language = getLanguageFromOption(lang());
     if (editor) editor.destroy();
     if (language === undefined) {
       editor = new EditorView({
         parent: editorParent,
         doc: content,
-        extensions: [basicSetup, theme, gruvboxDark],
+        extensions: [basicSetup, theme, dracula],
       });
       return;
     }
     editor = new EditorView({
       parent: editorParent,
       doc: content,
-      extensions: [basicSetup, theme, gruvboxDark, language],
+      extensions: [basicSetup, theme, dracula, language],
     });
   });
 
@@ -163,7 +105,7 @@ export default function EditorWrapper() {
 
       <div
         ref={editorParent}
-        class='bg-[#282828] min-h-[66vh] h-fit mx-auto w-[80%]'
+        class='bg-[#272935] min-h-[66vh] h-fit mx-auto w-[80%] drop-shadow-2xl'
         onClick={() => editor.focus()}
       />
       <Modal
