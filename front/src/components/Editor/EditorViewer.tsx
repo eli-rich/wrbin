@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { useRouteData } from '@solidjs/router';
-import { gruvboxDark } from 'cm6-theme-gruvbox-dark';
+import { dracula } from 'thememirror';
 import { basicSetup } from 'codemirror';
 import { createEffect, createMemo } from 'solid-js';
 import getLanguageFromOption from './language';
@@ -22,7 +22,7 @@ export default function EditorViewer() {
       editor = new EditorView({
         doc: post().content,
         parent: editorParent,
-        extensions: [basicSetup, theme, gruvboxDark],
+        extensions: [basicSetup, theme, dracula],
       });
     }
     const content = editor.state.doc.toJSON().join('\n');
@@ -32,14 +32,14 @@ export default function EditorViewer() {
       editor = new EditorView({
         parent: editorParent,
         doc: content,
-        extensions: [basicSetup, theme, gruvboxDark],
+        extensions: [basicSetup, theme, dracula],
       });
       return;
     }
     editor = new EditorView({
       parent: editorParent,
       doc: content,
-      extensions: [basicSetup, theme, gruvboxDark, language],
+      extensions: [basicSetup, theme, dracula, language],
     });
   });
 
