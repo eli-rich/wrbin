@@ -105,7 +105,7 @@ export default function EditorWrapper() {
 
       <div
         ref={editorParent}
-        class='bg-[#272935] min-h-[66vh] h-fit mx-auto w-[80%] drop-shadow-2xl'
+        class='bg-[#2d2f3f] min-h-[66vh] h-fit mx-auto w-[80%] drop-shadow-2xl'
         onClick={() => editor.focus()}
       />
       <Modal
