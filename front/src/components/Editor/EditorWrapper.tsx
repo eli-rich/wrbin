@@ -30,7 +30,7 @@ export default function EditorWrapper() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          content: editor.state.doc.toJSON().join('\n'),
+          content: editor.state.doc.toJSON().join('\n').trim(),
           title: title.value,
           lang: lang(),
         }),
