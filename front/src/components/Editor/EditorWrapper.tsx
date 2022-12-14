@@ -31,7 +31,7 @@ export default function EditorWrapper() {
         },
         body: JSON.stringify({
           content: editor.state.doc.toJSON().join('\n').trim(),
-          title: title.value,
+          title: title.value !== undefined && title.value !== '' ? title.value : 'Untitled',
           lang: lang(),
         }),
       });
@@ -55,6 +55,8 @@ export default function EditorWrapper() {
       width: '100%',
       margin: '2rem auto 0 auto',
     },
+    '.cm-content': { 'min-height': '66vh' },
+    '.cm-gutter': { 'min-height': '66vh', 'min-width': '2ch', margin: 'auto' },
   });
 
   const updateLang = (e: Event) => {
@@ -65,7 +67,7 @@ export default function EditorWrapper() {
       editor = new EditorView({
         doc: '',
         parent: editorParent,
-        extensions: [basicSetup, theme, dracula],
+        extensions: [theme, dracula],
       });
     }
     const content = editor.state.doc.toJSON().join('\n');
@@ -94,7 +96,7 @@ export default function EditorWrapper() {
             <span>Title</span>
             <input
               type='text'
-              placeholder='My Bin'
+              placeholder='Untitled'
               class='input input-bordered input-primary'
               ref={title}
             />
