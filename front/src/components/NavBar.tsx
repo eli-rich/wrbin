@@ -61,7 +61,7 @@ export default function NavBar() {
           {/* log out modal */}
           <Show when={showLogout()}>
             <Modal
-              title='Sign out'
+              title='Me'
               centered={true}
               htmlName='logout-modal'
               show={showLogout}
