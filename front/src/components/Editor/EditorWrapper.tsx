@@ -91,18 +91,24 @@ export default function EditorWrapper() {
   return (
     <>
       <div class='flex mt-4 -mb-4 w-[80%] mx-auto justify-between'>
-        <div class='form-control'>
-          <label class='input-group'>
-            <span>Title</span>
-            <input
-              type='text'
-              placeholder='Untitled'
-              class='input input-bordered input-primary'
-              ref={title}
-            />
-          </label>
+        <div class='flex gap-2'>
+          <div class='form-control w-1/2'>
+            <label class='input-group'>
+              <span>Title</span>
+              <input
+                type='text'
+                placeholder='Untitled'
+                class='input input-bordered input-primary w-full'
+                ref={title}
+              />
+            </label>
+          </div>
+          <button class='btn btn-secondary btn-outline w-[10rem]' onClick={handleUpload}>
+            Save
+          </button>
         </div>
-        <EditorOptions handleUpload={handleUpload} updateLang={updateLang} />
+
+        <EditorOptions updateLang={updateLang} />
       </div>
 
       <div

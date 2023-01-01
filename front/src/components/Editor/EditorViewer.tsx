@@ -26,7 +26,7 @@ export default function EditorViewer() {
       });
     }
     const content = editor.state.doc.toJSON().join('\n');
-    const language = await getLanguageFromOption(post().lang);
+    const language = getLanguageFromOption(post().lang);
     if (editor) editor.destroy();
     if (language === undefined) {
       editor = new EditorView({
@@ -43,6 +43,14 @@ export default function EditorViewer() {
     });
   });
 
+  const handleCopy = async (e: Event) => {
+    try {
+      await navigator.clipboard.writeText(editor.state.doc.toString());
+    } catch (e: any) {
+      console.error(e);
+    }
+  };
+
   return (
     <>
       <div class='flex mt-4 -mb-4 w-[80%] mx-auto justify-between'>
@@ -57,12 +65,17 @@ export default function EditorViewer() {
             />
           </label>
         </div>
-        <button
-          class='btn btn-primary'
-          onClick={() => (window.location.href = window.location.href.replace('/bin', '/raw'))}
-        >
-          Raw
-        </button>
+        <div class='flex gap-2'>
+          <button class='btn btn-secondary' onClick={handleCopy}>
+            Copy
+          </button>
+          <button
+            class='btn btn-primary'
+            onClick={() => (window.location.href = window.location.href.replace('/bin', '/raw'))}
+          >
+            Raw
+          </button>
+        </div>
       </div>
       <div
         ref={editorParent}

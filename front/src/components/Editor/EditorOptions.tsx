@@ -1,7 +1,4 @@
-import { onMount } from 'solid-js';
-
 interface EditorOptionsProps {
-  handleUpload: () => Promise<void>;
   updateLang: (e: Event) => void;
 }
 export default function EditorOptions(props: EditorOptionsProps) {
@@ -36,9 +33,6 @@ export default function EditorOptions(props: EditorOptionsProps) {
           <option>JSON</option>
           <option>Brainfuck</option>
         </select>
-        <button class='btn btn-secondary btn-outline w-[10rem]' onClick={props.handleUpload}>
-          Save
-        </button>
       </div>
     </>
   );
