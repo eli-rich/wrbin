@@ -3,3 +3,4 @@ server
 .env
 lotsOfData.txt
 .DS_Store
+target/
